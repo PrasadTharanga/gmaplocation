@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+   <title>Google Maps Geocoding Demo 1</title> 
+   <!-- <script src="http://maps.google.com/maps/api/js?sensor=false" 
+           type="text/javascript"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoWvhiXQiAx_ScNVBnwWF6qxIz53hkgSc&callback=myMap"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+       
+
+           <!-- AIzaSyDoWvhiXQiAx_ScNVBnwWF6qxIz53hkgSc -->
+          
+</head> 
+<body onload="myMap();"> 
+   <div id="map" style="width: 800px; height: 400px;"></div> 
+   <hr>
+   <!-- <span id="latitude"></span> | <span id="longitude"></span> <br> -->
+   <input type="text" id="latitude"> <input type="text" id="longitude">
+   
+   <input type="text" id="address"  value="open university of Sri Lanka"><button onclick="myMap(document.getElementById('address').value)">Get Location</button>
+
+   <script type="text/javascript"> 
+   function myMap(address = 'open university of Sri Lanka'){
+        // var address = 'London, UK';
+        console.log(address);
+        // var myLatlng = new google.maps.LatLng(20.268455824834792,85.84099235520011);
+
+        var map = new google.maps.Map(document.getElementById('map'), { 
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            zoom: 16
+        });
+
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({
+            'address': address,            
+        }, 
+
+        function(results, status) {
+        if(status == google.maps.GeocoderStatus.OK) {
+            var marker = new google.maps.Marker({
+                position: results[0].geometry.location,
+                map: map,
+                draggable: true 
+            });
+            map.setCenter(results[0].geometry.location);
+
+            if (results[0]) {
+                            // $('#address').val(results[0].formatted_address);
+                            $('#latitude').val(marker.getPosition().lat());
+                            $('#longitude').val(marker.getPosition().lng());
+                            // infowindow.setContent(results[0].formatted_address);
+                            // infowindow.open(map, marker);
+                            console.log('>>>> '+ results[0].formatted_address);
+            }
+
+             google.maps.event.addListener(marker, 'dragend', function() {
+                console.log('++++++ '+ marker.getPosition());
+                $('#latitude').val(marker.getPosition().lat());
+                $('#longitude').val(marker.getPosition().lng());
+                map.setCenter(marker.getPosition());        
+            }); 
+
+        }
+        });
+
+
+       
+
+   }
+
+
+            
+   
+   </script> 
+</body> 
+</html>
